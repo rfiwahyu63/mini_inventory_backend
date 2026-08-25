@@ -1,12 +1,9 @@
-import supabase from "../config/supabase.js";
+import db from "../config/supabase.js";
 
 export const getAllProducts = async () => {
-  const { data,error } = await supabase
-      .from("products")
-      .select("*");
-    
-    if (error) {
-      throw error;
-    }
-    return data;
+  const result = await db.query(
+    "SELECT * FROM products ORDER BY created_at DESC"
+  );
+
+  return result.rows;
 };
