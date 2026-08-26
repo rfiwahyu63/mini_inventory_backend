@@ -1,0 +1,3 @@
+◇ injected env (4) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+Server berjalan di http://localhost:5000;
