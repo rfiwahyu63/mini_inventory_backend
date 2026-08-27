@@ -90,6 +90,7 @@ export const addProduct = async (req, res) => {
       data: product,
     });
   } catch (error) {
+    console.error(error);
     if (error.code === "23505") {
       return res.status(409).json({
         success: false,
@@ -97,9 +98,9 @@ export const addProduct = async (req, res) => {
       });
     }
 
-    res.status(500).json({
+    res.status(500).json({                   
       success: false,
-      message: error.message,
+      message: "Terjadi kesalahan pada server",
     });
   }
 };
