@@ -1,6 +1,7 @@
 import express from "express";
 import productRoutes from "./routes/productRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
+import stockMovementRoutes from "./routes/stockMovementRoutes.js";
 
 const app = express();
 
@@ -14,5 +15,6 @@ app.get("/", (req, res) => {
 
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/stock_movements", stockMovementRoutes);
 
 export default app;
