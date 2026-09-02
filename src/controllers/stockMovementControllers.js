@@ -2,6 +2,7 @@ import {
   getAllStockMovements,
   getStockMovementById,
   createStockIn,
+  createStockOut
 } from "../services/stockMovementService.js";
 
 export const getStockMovementscontroller = async (req, res) => {
@@ -51,7 +52,7 @@ export const getStockMovementByIdController = async (req, res) => {
   }
 };
 
-export const addStockIn = async (req, res) => {
+export const createStockInController = async (req, res) => {
   try {
     const { product_id, user_id, quantity, note } = req.body;
 
@@ -89,5 +90,58 @@ export const addStockIn = async (req, res) => {
       success: false,
       message: "Terjadi kesalahan pada server",
     });
+  }
+};
+
+
+export const createStockOutController = async (req,res) => {
+  try {
+     const {product_id,user_id,quantity,note} = req.body;
+
+    if (!product_id || !user_id || !quantity){
+      return res.status(400).json({
+        success: false,
+        message: "Product_id,User_id,dan Quantity wajib diisi"
+      });
+    }
+
+    if (quantity <= 0){
+      return res.status(400).json({
+        success: false,
+        message: "Quantity Harus lebih dari 0"
+      });
+    }
+
+    const result = await createStockOut({
+      product_id,user_id,quantity,note
+    });
+
+     if (result === null){
+       return res.status(404).json({
+         success: false,
+         message: "Produk tidak ditemukan"
+       });
+     }
+
+     if (result === "INSUFFICIENT_STOCK"){
+       return res.status(400).json({
+         success: false,
+         message: "Stok tidak mencukupi"
+       });
+     }
+
+    return res.status(201).json({
+      success: true,
+      message: "Stok keluar berhasil dicatat",
+      data: result
+    });
+    
+  } catch (error) {
+     console.error(error)
+
+     return res.status(500)({
+       success: false,
+       message: "Terjadi kesalahan pada server"
+     });
   }
 };
