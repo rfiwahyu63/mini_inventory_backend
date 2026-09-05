@@ -7,15 +7,16 @@ import {
   deleteProductById
   } from "../controllers/productControllers.js";
 import { authenticateToken } from "../middleware/authMiddleware.js";
+import { authorizeRole } from "../middleware/roleMiddleware.js";
 
 const router = express.Router();
 
 router.use(authenticateToken); // Apply authentication middleware to all routes
 
-router.get("/", getProducts);
-router.get("/:id", getProduct);
-router.post("/", addProduct);
-router.put("/:id", updateProductById);
-router.delete("/:id", deleteProductById);
+router.get("/", authorizeRole("admin","staff","viewer"),getProducts);
+router.get("/:id", authorizeRole("admin", "staff", "viewer"),getProduct);
+router.post("/",  authorizeRole("admin"),addProduct);
+router.put("/:id", authorizeRole("admin"),updateProductById);
+router.delete("/:id", authorizeRole("admin"),deleteProductById);
 
 export default router;
