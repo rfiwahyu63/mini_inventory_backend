@@ -1,6 +1,7 @@
 import db from "../config/supabase.js";
 import { hashPassword } from "../utils/password.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export async function registerUser(name,email,password,role){
 
@@ -40,10 +41,25 @@ export async function loginUser(email,password){
     return null;
   }
 
+  const accessToken = generateAccessToken(user);
+
   return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role
+    user,
+    accessToken
   };
+}
+
+
+function generateAccessToken(user){
+  return jwt.sign(
+    { 
+      userId: user.id, 
+      role: user.role 
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1h"
+    }
+  );
+
 }
