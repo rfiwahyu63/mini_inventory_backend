@@ -6,8 +6,11 @@ import {
         createStockOutController
         } 
   from "../controllers/stockMovementControllers.js";
+import { authenticateToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+
+router.use(authenticateToken); // Apply authentication middleware to all routes
 
 router.get("/", getStockMovementscontroller);
 router.get("/:id", getStockMovementByIdController);

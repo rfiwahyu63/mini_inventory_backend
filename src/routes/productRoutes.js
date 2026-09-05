@@ -6,8 +6,11 @@ import {
   updateProductById,
   deleteProductById
   } from "../controllers/productControllers.js";
+import { authenticateToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+
+router.use(authenticateToken); // Apply authentication middleware to all routes
 
 router.get("/", getProducts);
 router.get("/:id", getProduct);
