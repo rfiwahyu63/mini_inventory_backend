@@ -1,4 +1,4 @@
-import { registerUser } from "../services/authService.js";
+import { registerUser,loginUser } from "../services/authService.js";
 
 export async function registerController(req,res){
   try {
@@ -54,5 +54,39 @@ export async function registerController(req,res){
       success: false,
       message: "Terjadi kesalahan pada server",
     });
+  }
+}
+
+
+export async function loginController(req,res) {
+  try {
+      const {email,password} = req.body;
+        if (!email || !password) {
+          return res.status(400).json({
+            success: false,
+            message: "Email dan password wajib diisi",
+        });
+      }
+      
+      const user = await loginUser(email,password);
+
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: "Email atau password salah",
+        });
+      } 
+        return res.status(200).json({
+          success: true,
+          message: "Login Berhasil",
+          data: user,
+        });
+    } catch (error) {
+      console.error(error);
+
+      return res.status(500).json({
+        success: false,
+        message: "Terjadi kesalahan pada server",
+      });
   }
 }
